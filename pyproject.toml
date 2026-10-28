@@ -1,12 +1,12 @@
 [project]
-name = "goma"
+name = "goma-gg"
 version = "0.1.0"
 description = "Async client and CLI for goma.gg shopping lists."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Hjord", email = "hjorden@gmail.com" }]
-keywords = ["goma", "bilka", "bilkatogo", "danish", "groceries", "shopping-list", "async"]
+keywords = ["goma", "danish", "groceries", "shopping-list", "home-assistant", "async"]
 requires-python = ">=3.12"
 dependencies = ["httpx>=0.28.1"]
 
@@ -16,12 +16,24 @@ cli = ["typer>=0.15"]
 [project.scripts]
 goma = "goma.__main__:main"
 
+[project.urls]
+Homepage = "https://github.com/Hjord/goma"
+Repository = "https://github.com/Hjord/goma"
+Issues = "https://github.com/Hjord/goma/issues"
+
 [build-system]
 requires = ["uv_build>=0.9.26,<0.13"]
 build-backend = "uv_build"
 
+[tool.uv.build-backend]
+module-name = "goma"
+
 [tool.uv]
 default-groups = ["dev"]
+conflicts = [[{ group = "dev" }, { group = "ha" }]]
+
+[tool.uv.dependency-groups]
+ha = { requires-python = ">=3.14.2" }
 
 [tool.ruff]
 target-version = "py312"
@@ -37,8 +49,12 @@ asyncio_default_fixture_loop_scope = "function"
 
 [dependency-groups]
 dev = [
-    "goma[cli]",
+    "goma-gg[cli]",
     "pytest>=8",
     "pytest-asyncio>=0.24",
     "ruff>=0.8",
+]
+ha = [
+    "pytest-homeassistant-custom-component==0.13.373",
+    "respx>=0.22.0",
 ]

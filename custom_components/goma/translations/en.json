@@ -1,0 +1,35 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Log in to goma",
+        "description": "goma will email you a 6-digit code. Logging in with Google or Apple is not supported, so use the email address of your goma account.",
+        "data": { "email": "Email" }
+      },
+      "code": {
+        "title": "Enter the code",
+        "description": "Enter the 6-digit code goma sent to {email}. Check your spam folder if it doesn't arrive.",
+        "data": { "code": "Code" }
+      },
+      "reauth_confirm": {
+        "title": "Log in to goma again",
+        "description": "goma has ended the session for {email}. Submit to have goma email you a new code."
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not reach goma. Try again later.",
+      "code_not_sent": "goma would not send a code to this email. Check that it is the email of an existing goma account.",
+      "invalid_code": "The code is wrong or has expired.",
+      "unknown": "goma answered with something unexpected."
+    },
+    "abort": {
+      "already_configured": "This goma account is already set up.",
+      "reauth_successful": "Logged in to goma again.",
+      "wrong_account": "That code belongs to a different goma account than this entry."
+    }
+  },
+  "exceptions": {
+    "auth_failed": { "message": "goma ended the session: {error}" },
+    "update_failed": { "message": "Could not read the goma shopping lists: {error}" }
+  }
+}

@@ -1,3 +1,4 @@
+import importlib.util
 from collections.abc import AsyncIterator
 from typing import Any
 
@@ -7,6 +8,9 @@ import pytest
 from goma import GomaClient, TokenStorage
 
 from .fake_goma import FakeGoma
+
+# The Home Assistant tests need the `ha` dependency group; the library tests run without it.
+collect_ignore = [] if importlib.util.find_spec("homeassistant") else ["ha"]
 
 
 class MemoryTokenStorage(TokenStorage):

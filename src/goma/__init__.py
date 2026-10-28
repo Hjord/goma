@@ -12,7 +12,7 @@ from .models import ListItem, Product, ShoppingList
 from .token_storage import FileTokenStorage, TokenStorage
 
 try:
-    __version__ = version("goma")
+    __version__ = version("goma-gg")
 except PackageNotFoundError:
     __version__ = "0.0.0"
 

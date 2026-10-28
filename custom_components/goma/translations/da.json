@@ -1,0 +1,35 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Log ind på goma",
+        "description": "goma sender dig en 6-cifret kode på e-mail. Login med Google eller Apple understøttes ikke, så brug e-mailen til din goma-konto.",
+        "data": { "email": "E-mail" }
+      },
+      "code": {
+        "title": "Indtast koden",
+        "description": "Indtast den 6-cifrede kode, goma har sendt til {email}. Tjek dit spamfilter, hvis den ikke kommer.",
+        "data": { "code": "Kode" }
+      },
+      "reauth_confirm": {
+        "title": "Log ind på goma igen",
+        "description": "goma har afsluttet sessionen for {email}. Tryk send for at få en ny kode på e-mail."
+      }
+    },
+    "error": {
+      "cannot_connect": "Kunne ikke få forbindelse til goma. Prøv igen senere.",
+      "code_not_sent": "goma ville ikke sende en kode til denne e-mail. Tjek, at det er e-mailen til en eksisterende goma-konto.",
+      "invalid_code": "Koden er forkert eller udløbet.",
+      "unknown": "goma svarede med noget uventet."
+    },
+    "abort": {
+      "already_configured": "Denne goma-konto er allerede sat op.",
+      "reauth_successful": "Logget ind på goma igen.",
+      "wrong_account": "Koden hører til en anden goma-konto end denne."
+    }
+  },
+  "exceptions": {
+    "auth_failed": { "message": "goma afsluttede sessionen: {error}" },
+    "update_failed": { "message": "Kunne ikke læse goma-indkøbslisterne: {error}" }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "domain": "goma",
+  "name": "goma",
+  "codeowners": ["@Hjord"],
+  "config_flow": true,
+  "documentation": "https://github.com/Hjord/goma",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/Hjord/goma/issues",
+  "requirements": ["goma-gg==0.1.0"],
+  "version": "0.1.0"
+}

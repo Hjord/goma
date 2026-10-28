@@ -61,7 +61,8 @@ class GomaClient:
         if response.status_code != 200:
             raise GomaError(f"goma refused to send a code: {_message(response)}")
 
-    async def verify_code(self, email: str, code: str) -> None:
+    async def verify_code(self, email: str, code: str) -> str:
+        """Log in with the emailed code. Returns the goma user id."""
         response = await self._send(
             "POST",
             "/auth/v1/verify",
@@ -69,7 +70,9 @@ class GomaClient:
         )
         if response.status_code in (400, 403):
             raise InvalidCodeError(_message(response))
-        await self._store(Session.from_auth(_json(response, "Login")))
+        session = Session.from_auth(_json(response, "Login"))
+        await self._store(session)
+        return session.user_id
 
     async def get_lists(self) -> list[ShoppingList]:
         """Every shopping list the account can see, newest first."""

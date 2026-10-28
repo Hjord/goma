@@ -23,8 +23,9 @@ async def test_request_code_never_creates_an_account(client: GomaClient, goma: F
 async def test_verify_code_stores_the_session(
     client: GomaClient, goma: FakeGoma, storage: MemoryTokenStorage
 ) -> None:
-    await client.verify_code("someone@example.com", goma.code)
+    user_id = await client.verify_code("someone@example.com", goma.code)
 
+    assert user_id == USER_ID
     assert storage.data is not None
     assert storage.data["refresh_token"] == "refresh-1"
     assert storage.data["user_id"] == USER_ID

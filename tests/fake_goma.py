@@ -24,6 +24,8 @@ class FakeGoma:
     codes_sent_to: list[dict[str, Any]] = field(default_factory=list)
     refreshes: int = 0
     reject_refresh: bool = False
+    down: bool = False
+    user_id: str = USER_ID
     _issued: int = 0
     _valid_access: set[str] = field(default_factory=set)
     _valid_refresh: set[str] = field(default_factory=set)
@@ -35,6 +37,8 @@ class FakeGoma:
         self._valid_access.clear()
 
     def handle(self, request: httpx.Request) -> httpx.Response:
+        if self.down:
+            raise httpx.ConnectError("goma is down", request=request)
         if request.headers.get("apikey") != API_KEY:
             return httpx.Response(401, json={"message": "No API key found in request"})
         path = request.url.path
@@ -85,7 +89,7 @@ class FakeGoma:
             "expires_in": self.access_token_lifetime,
             "expires_at": int(self.now) + self.access_token_lifetime,
             "refresh_token": refresh,
-            "user": {"id": USER_ID, "email": "someone@example.com"},
+            "user": {"id": self.user_id, "email": "someone@example.com"},
         }
 
     def _rest(self, table: str, query: dict[str, list[str]]) -> httpx.Response:
