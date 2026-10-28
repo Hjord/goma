@@ -26,7 +26,7 @@ def reauth_flows(hass: HomeAssistant, entry: MockConfigEntry) -> list:
 async def end_session(hass: HomeAssistant, goma: FakeGoma, freezer: FrozenDateTimeFactory) -> None:
     goma.revoke_access_tokens()
     goma.reject_refresh = True
-    freezer.tick(timedelta(minutes=5))
+    freezer.tick(timedelta(hours=1))
     async_fire_time_changed(hass)
     await hass.async_block_till_done()
 
