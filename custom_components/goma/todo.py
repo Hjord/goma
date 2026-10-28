@@ -1,12 +1,10 @@
 from homeassistant.components.todo import TodoItem, TodoItemStatus, TodoListEntity
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from goma import ListItem
 
-from .const import DOMAIN
 from .coordinator import GomaConfigEntry, GomaCoordinator
 
 PARALLEL_UPDATES = 0
@@ -38,14 +36,8 @@ class GomaTodoList(CoordinatorEntity[GomaCoordinator], TodoListEntity):
     def __init__(self, coordinator: GomaCoordinator, list_id: int) -> None:
         super().__init__(coordinator)
         self._list_id = list_id
-        entry = coordinator.config_entry
-        self._attr_unique_id = f"{entry.unique_id}_{list_id}"
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, entry.entry_id)},
-            name=entry.title,
-            manufacturer="goma",
-            entry_type=DeviceEntryType.SERVICE,
-        )
+        self._attr_unique_id = f"{coordinator.config_entry.unique_id}_{list_id}"
+        self._attr_device_info = coordinator.device_info
 
     @property
     def name(self) -> str | None:

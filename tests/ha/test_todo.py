@@ -25,7 +25,7 @@ async def items(hass: HomeAssistant, entity: str) -> list[dict[str, Any]]:
 
 
 async def next_poll(hass: HomeAssistant, freezer: FrozenDateTimeFactory) -> None:
-    freezer.tick(timedelta(minutes=5))
+    freezer.tick(timedelta(hours=1))
     async_fire_time_changed(hass)
     await hass.async_block_till_done()
 

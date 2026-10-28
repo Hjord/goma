@@ -4,12 +4,16 @@
       "user": {
         "title": "Log in to goma",
         "description": "goma will email you a 6-digit code. Logging in with Google or Apple is not supported, so use the email address of your goma account.",
-        "data": { "email": "Email" }
+        "data": {
+          "email": "Email"
+        }
       },
       "code": {
         "title": "Enter the code",
         "description": "Enter the 6-digit code goma sent to {email}. Check your spam folder if it doesn't arrive.",
-        "data": { "code": "Code" }
+        "data": {
+          "code": "Code"
+        }
       },
       "reauth_confirm": {
         "title": "Log in to goma again",
@@ -28,8 +32,32 @@
       "wrong_account": "That code belongs to a different goma account than this entry."
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "title": "goma options",
+        "data": {
+          "update_interval": "Update interval"
+        },
+        "data_description": {
+          "update_interval": "Minutes between reads of your goma lists. Press the refresh button to read them right away."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "refresh": {
+        "name": "Refresh lists"
+      }
+    }
+  },
   "exceptions": {
-    "auth_failed": { "message": "Log in to goma again. {error}" },
-    "update_failed": { "message": "Could not read the goma shopping lists: {error}" }
+    "auth_failed": {
+      "message": "Log in to goma again. {error}"
+    },
+    "update_failed": {
+      "message": "Could not read the goma shopping lists: {error}"
+    }
   }
 }

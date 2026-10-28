@@ -1,13 +1,15 @@
 from dataclasses import dataclass
+from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from goma import GomaClient, GomaError, ListItem, NotLoggedInError, ShoppingList
 
-from .const import DOMAIN, LOGGER, UPDATE_INTERVAL
+from .const import CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL_MINUTES, DOMAIN, LOGGER
 
 type GomaConfigEntry = ConfigEntry[GomaCoordinator]
 
@@ -24,10 +26,21 @@ class GomaCoordinator(DataUpdateCoordinator[dict[int, ListContents]]):
     config_entry: GomaConfigEntry
 
     def __init__(self, hass: HomeAssistant, entry: GomaConfigEntry, client: GomaClient) -> None:
+        minutes = entry.options.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL_MINUTES)
         super().__init__(
-            hass, LOGGER, config_entry=entry, name=DOMAIN, update_interval=UPDATE_INTERVAL
+            hass,
+            LOGGER,
+            config_entry=entry,
+            name=DOMAIN,
+            update_interval=timedelta(minutes=minutes),
         )
         self.client = client
+        self.device_info = DeviceInfo(
+            identifiers={(DOMAIN, entry.entry_id)},
+            name=entry.title,
+            manufacturer="goma",
+            entry_type=DeviceEntryType.SERVICE,
+        )
 
     async def _async_update_data(self) -> dict[int, ListContents]:
         try:

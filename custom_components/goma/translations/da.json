@@ -4,12 +4,16 @@
       "user": {
         "title": "Log ind på goma",
         "description": "goma sender dig en 6-cifret kode på e-mail. Login med Google eller Apple understøttes ikke, så brug e-mailen til din goma-konto.",
-        "data": { "email": "E-mail" }
+        "data": {
+          "email": "E-mail"
+        }
       },
       "code": {
         "title": "Indtast koden",
         "description": "Indtast den 6-cifrede kode, goma har sendt til {email}. Tjek dit spamfilter, hvis den ikke kommer.",
-        "data": { "code": "Kode" }
+        "data": {
+          "code": "Kode"
+        }
       },
       "reauth_confirm": {
         "title": "Log ind på goma igen",
@@ -28,8 +32,32 @@
       "wrong_account": "Koden hører til en anden goma-konto end denne."
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "title": "goma-indstillinger",
+        "data": {
+          "update_interval": "Opdateringsinterval"
+        },
+        "data_description": {
+          "update_interval": "Minutter mellem hver læsning af dine goma-lister. Tryk på opdater-knappen for at læse dem med det samme."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "refresh": {
+        "name": "Opdater lister"
+      }
+    }
+  },
   "exceptions": {
-    "auth_failed": { "message": "Log ind på goma igen. {error}" },
-    "update_failed": { "message": "Kunne ikke læse goma-indkøbslisterne: {error}" }
+    "auth_failed": {
+      "message": "Log ind på goma igen. {error}"
+    },
+    "update_failed": {
+      "message": "Kunne ikke læse goma-indkøbslisterne: {error}"
+    }
   }
 }

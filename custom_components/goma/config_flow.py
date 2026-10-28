@@ -2,14 +2,28 @@ from collections.abc import Mapping
 from typing import Any
 
 import voluptuous as vol
-from homeassistant.config_entries import SOURCE_REAUTH, ConfigFlow, ConfigFlowResult
+from homeassistant.config_entries import (
+    SOURCE_REAUTH,
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlowWithReload,
+)
 from homeassistant.const import CONF_EMAIL
+from homeassistant.core import callback
 from homeassistant.helpers.httpx_client import create_async_httpx_client
-from homeassistant.helpers.selector import TextSelector, TextSelectorConfig, TextSelectorType
+from homeassistant.helpers.selector import (
+    NumberSelector,
+    NumberSelectorConfig,
+    NumberSelectorMode,
+    TextSelector,
+    TextSelectorConfig,
+    TextSelectorType,
+)
 
 from goma import GomaClient, GomaError, GomaUnreachableError, InvalidCodeError, TokenStorage
 
-from .const import DOMAIN, LOGGER
+from .const import CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL_MINUTES, DOMAIN, LOGGER
 from .token_storage import HomeAssistantTokenStorage
 
 CONF_CODE = "code"
@@ -23,6 +37,22 @@ USER_SCHEMA = vol.Schema(
 )
 CODE_SCHEMA = vol.Schema(
     {vol.Required(CONF_CODE): TextSelector(TextSelectorConfig(autocomplete="one-time-code"))}
+)
+OPTIONS_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_UPDATE_INTERVAL, default=DEFAULT_UPDATE_INTERVAL_MINUTES): vol.All(
+            NumberSelector(
+                NumberSelectorConfig(
+                    min=5,
+                    max=1440,
+                    step=5,
+                    unit_of_measurement="min",
+                    mode=NumberSelectorMode.BOX,
+                )
+            ),
+            vol.Coerce(int),
+        )
+    }
 )
 
 
@@ -43,6 +73,11 @@ class GomaConfigFlow(ConfigFlow, domain=DOMAIN):
     """Logs in with the code goma emails: first the email, then the code."""
 
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry) -> "GomaOptionsFlow":
+        return GomaOptionsFlow()
 
     def __init__(self) -> None:
         self._email = ""
@@ -126,3 +161,17 @@ class GomaConfigFlow(ConfigFlow, domain=DOMAIN):
 
     def _client(self, storage: TokenStorage | None) -> GomaClient:
         return GomaClient(token_storage=storage, httpx_client=create_async_httpx_client(self.hass))
+
+
+class GomaOptionsFlow(OptionsFlowWithReload):
+    """Sets how often the lists are read. The entry reloads to apply it."""
+
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        if user_input is not None:
+            return self.async_create_entry(data=user_input)
+        return self.async_show_form(
+            step_id="init",
+            data_schema=self.add_suggested_values_to_schema(
+                OPTIONS_SCHEMA, self.config_entry.options
+            ),
+        )

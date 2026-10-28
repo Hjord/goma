@@ -1,4 +1,3 @@
-from datetime import timedelta
 from logging import getLogger
 
 from homeassistant.const import Platform
@@ -6,6 +5,7 @@ from homeassistant.const import Platform
 LOGGER = getLogger(__package__)
 
 DOMAIN = "goma"
-PLATFORMS: list[Platform] = [Platform.TODO]
+PLATFORMS: list[Platform] = [Platform.BUTTON, Platform.TODO]
 
-UPDATE_INTERVAL = timedelta(minutes=5)
+CONF_UPDATE_INTERVAL = "update_interval"
+DEFAULT_UPDATE_INTERVAL_MINUTES = 60
