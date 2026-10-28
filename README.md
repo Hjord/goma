@@ -51,7 +51,8 @@ Home Assistant keeps the session in its private storage and renews it on its own
 
 ### Good to know
 
-- The lists are polled every 5 minutes.
+- The lists are read once an hour. Press the **Refresh lists** button to read them right away, for example from a dashboard or an automation.
+- Change the interval under **Settings → Devices & services → goma → Configure**, from 5 minutes to a day.
 - The lists are **read-only** for now. You tick items off in goma, not in Home Assistant.
 - A list deleted in goma becomes unavailable. Remove its entity if you don't want it.
 
