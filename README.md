@@ -1,6 +1,6 @@
 # goma
 
-Read your [goma.gg](https://goma.gg) shopping lists from Python or the terminal. goma plans your meals from this week's offers and builds the shopping list. This package gives you that list as data: each item with its quantity, goma's product details, and the store's own product number where goma has one.
+Read your [goma.gg](https://goma.gg) shopping lists in Home Assistant, from Python, or in the terminal. goma plans your meals from this week's offers and builds the shopping list. This package gives you that list as data: each item with its quantity, goma's product details, and the store's own product number where goma has one.
 
 ```console
 $ goma items
@@ -11,20 +11,58 @@ $ goma items
 
 > **Unofficial.** This project is not affiliated with or endorsed by goma. It uses the same private API as the goma.gg website, so that API can change or break at any time.
 
+- [Home Assistant](#home-assistant)
 - [Install](#install)
 - [Command line](#command-line)
 - [Library](#library)
 - [How it works](#how-it-works)
 - [Development](#development)
 
+## Home Assistant
+
+The integration shows every goma shopping list your account can see as a Home Assistant to-do list. Ticked-off items show as completed, and the list's state is the number of items still to buy.
+
+```
+Indkøbsliste                3
+  ☐ 2 x Creme fraiche 38% fedt øko     Salling ØKO · Bilka
+  ☐ Salt
+  ☐ Mælk                               Arla · Netto
+  ☑ Kartofler                          Salling · Bilka
+```
+
+### Install
+
+Requires Home Assistant 2026.10 or newer.
+
+- **HACS:** add `https://github.com/Hjord/goma` as a custom repository of type *Integration*, install **goma**, and restart Home Assistant.
+- **By hand:** copy `custom_components/goma` into your Home Assistant `config/custom_components/` folder, and restart.
+
+> **Not yet installable.** The integration installs its library, `goma-gg`, from PyPI, and that hasn't been published yet. Neither way works until it is. HACS also needs the repository to be public.
+
+### Set up
+
+1. Go to **Settings → Devices & services → Add integration → goma**.
+2. Enter the email of your goma account. goma emails you a 6-digit code.
+3. Enter the code.
+
+Logging in with Google or Apple can't be automated, so the integration always uses the email code.
+
+Home Assistant keeps the session in its private storage and renews it on its own. If goma ever ends it, Home Assistant asks you to log in again under **Settings → Devices & services**. Submit, and enter the new code goma emails you.
+
+### Good to know
+
+- The lists are polled every 5 minutes.
+- The lists are **read-only** for now. You tick items off in goma, not in Home Assistant.
+- A list deleted in goma becomes unavailable. Remove its entity if you don't want it.
+
 ## Install
 
-Requires Python 3.12 or newer. The repository is private for now, so install it straight from GitHub:
+Requires Python 3.12 or newer. The package is published as `goma-gg` and imported as `goma`. Until it is on PyPI, install it from GitHub:
 
 ```sh
-pip install 'goma[cli] @ git+https://github.com/Hjord/goma'
+pip install 'goma-gg[cli] @ git+https://github.com/Hjord/goma'
 # or run it without installing
-uvx --from 'goma[cli] @ git+https://github.com/Hjord/goma' goma --help
+uvx --from 'goma-gg[cli] @ git+https://github.com/Hjord/goma' goma --help
 ```
 
 Leave out `[cli]` if you only want the library. Its only dependency is httpx.
@@ -122,4 +160,13 @@ uv run pytest
 uv run ruff check . && uv run ruff format --check .
 ```
 
-The tests run against `tests/fake_goma.py`, an in-memory stand-in for goma's API, so no test talks to the real goma. CI runs on Python 3.12 and 3.14.
+The tests run against `tests/fake_goma.py`, an in-memory stand-in for goma's API, so no test talks to the real goma. CI runs the library tests on Python 3.12 and 3.14.
+
+The Home Assistant tests in `tests/ha` need Home Assistant itself, so they have their own dependency group:
+
+```sh
+uv sync --python 3.14 --no-default-groups --group ha
+uv run --no-sync pytest tests/ha
+```
+
+CI also runs Home Assistant's `hassfest` check on the integration.

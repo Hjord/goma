@@ -29,7 +29,7 @@
     }
   },
   "exceptions": {
-    "auth_failed": { "message": "goma afsluttede sessionen: {error}" },
+    "auth_failed": { "message": "Log ind på goma igen. {error}" },
     "update_failed": { "message": "Kunne ikke læse goma-indkøbslisterne: {error}" }
   }
 }

@@ -29,7 +29,7 @@
     }
   },
   "exceptions": {
-    "auth_failed": { "message": "goma ended the session: {error}" },
+    "auth_failed": { "message": "Log in to goma again. {error}" },
     "update_failed": { "message": "Could not read the goma shopping lists: {error}" }
   }
 }
