@@ -1,0 +1,44 @@
+[project]
+name = "goma"
+version = "0.1.0"
+description = "Async client and CLI for goma.gg shopping lists."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Hjord", email = "hjorden@gmail.com" }]
+keywords = ["goma", "bilka", "bilkatogo", "danish", "groceries", "shopping-list", "async"]
+requires-python = ">=3.12"
+dependencies = ["httpx>=0.28.1"]
+
+[project.optional-dependencies]
+cli = ["typer>=0.15"]
+
+[project.scripts]
+goma = "goma.__main__:main"
+
+[build-system]
+requires = ["uv_build>=0.9.26,<0.13"]
+build-backend = "uv_build"
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[dependency-groups]
+dev = [
+    "goma[cli]",
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.8",
+]
