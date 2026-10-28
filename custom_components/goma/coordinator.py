@@ -37,7 +37,7 @@ class GomaCoordinator(DataUpdateCoordinator[dict[int, ListContents]]):
         self.client = client
         self.device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
-            name=entry.title,
+            name="goma.gg",
             manufacturer="goma",
             entry_type=DeviceEntryType.SERVICE,
         )

@@ -34,14 +34,14 @@ Indkøbsliste                3
 
 Requires Home Assistant 2026.10 or newer.
 
-- **HACS:** add `https://github.com/Hjord/goma` as a custom repository of type *Integration*, install **goma**, and restart Home Assistant.
+- **HACS:** add `https://github.com/Hjord/goma` as a custom repository of type *Integration*, install **goma.gg**, and restart Home Assistant.
 - **By hand:** copy `custom_components/goma` into your Home Assistant `config/custom_components/` folder, and restart.
 
 > **Not yet installable.** The integration installs its library, `goma-gg`, from PyPI, and that hasn't been published yet. Neither way works until it is. HACS also needs the repository to be public.
 
 ### Set up
 
-1. Go to **Settings → Devices & services → Add integration → goma**.
+1. Go to **Settings → Devices & services → Add integration → goma.gg**.
 2. Enter the email of your goma account. goma emails you a 6-digit code.
 3. Enter the code.
 
@@ -52,7 +52,7 @@ Home Assistant keeps the session in its private storage and renews it on its own
 ### Good to know
 
 - The lists are read once an hour. Press the **Refresh lists** button to read them right away, for example from a dashboard or an automation.
-- Change the interval under **Settings → Devices & services → goma → Configure**, from 5 minutes to a day.
+- Change the interval under **Settings → Devices & services → goma.gg → Configure**, from 5 minutes to a day.
 - The lists are **read-only** for now. You tick items off in goma, not in Home Assistant.
 - A list deleted in goma becomes unavailable. Remove its entity if you don't want it.
 

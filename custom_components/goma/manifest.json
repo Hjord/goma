@@ -1,6 +1,6 @@
 {
   "domain": "goma",
-  "name": "goma",
+  "name": "goma.gg",
   "codeowners": ["@Hjord"],
   "config_flow": true,
   "documentation": "https://github.com/Hjord/goma",
