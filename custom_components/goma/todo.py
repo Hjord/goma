@@ -1,10 +1,14 @@
+from typing import Any
+
 from homeassistant.components.todo import TodoItem, TodoItemStatus, TodoListEntity
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import HomeAssistant, ServiceResponse, callback
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from goma import ListItem
+from goma import GomaError, ListItem, NotLoggedInError
 
+from .const import DOMAIN
 from .coordinator import GomaConfigEntry, GomaCoordinator
 
 PARALLEL_UPDATES = 0
@@ -55,6 +59,25 @@ class GomaTodoList(CoordinatorEntity[GomaCoordinator], TodoListEntity):
             return None
         return [todo_item(item) for item in contents.items]
 
+    async def async_get_goma_items(self) -> ServiceResponse:
+        """The list's items as goma has them now, each with its Bilka Article Number."""
+        try:
+            found = await self.coordinator.client.get_items(self._list_id, include_picked=True)
+        except NotLoggedInError as err:
+            self.coordinator.config_entry.async_start_reauth(self.hass)
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="auth_failed",
+                translation_placeholders={"error": str(err)},
+            ) from err
+        except GomaError as err:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="get_items_failed",
+                translation_placeholders={"error": str(err)},
+            ) from err
+        return {"items": [goma_item(item) for item in found]}
+
 
 def todo_item(item: ListItem) -> TodoItem:
     summary = item.name if item.quantity == 1 else f"{item.quantity} x {item.name}"
@@ -72,3 +95,16 @@ def todo_item(item: ListItem) -> TodoItem:
         status=TodoItemStatus.COMPLETED if item.is_picked else TodoItemStatus.NEEDS_ACTION,
         description=" · ".join(details) or None,
     )
+
+
+def goma_item(item: ListItem) -> dict[str, Any]:
+    return {
+        "id": item.id,
+        "name": item.name,
+        "quantity": item.quantity,
+        "picked": item.is_picked,
+        "bilka_article_number": item.bilka_article_number,
+        "product_id": item.product_id,
+        "brand": item.product.brand if item.product else None,
+        "store": item.product.store_name if item.product else None,
+    }

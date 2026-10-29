@@ -1,0 +1,5 @@
+get_items:
+  target:
+    entity:
+      integration: goma
+      domain: todo

@@ -1,11 +1,21 @@
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.httpx_client import create_async_httpx_client
+from homeassistant.helpers.typing import ConfigType
 
 from goma import GomaClient
 
-from .const import PLATFORMS
+from .const import DOMAIN, PLATFORMS
 from .coordinator import GomaConfigEntry, GomaCoordinator
+from .services import async_setup_services
 from .token_storage import HomeAssistantTokenStorage
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    async_setup_services(hass)
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: GomaConfigEntry) -> bool:

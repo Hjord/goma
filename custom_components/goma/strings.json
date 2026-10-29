@@ -58,6 +58,15 @@
     },
     "update_failed": {
       "message": "Could not read the goma shopping lists: {error}"
+    },
+    "get_items_failed": {
+      "message": "Could not read the goma shopping list: {error}"
+    }
+  },
+  "services": {
+    "get_items": {
+      "name": "Get items",
+      "description": "Reads a goma shopping list as goma has it now and returns its items, each with its quantity, whether it is ticked off, and its BilkaToGo Article Number where goma found the product at Bilka."
     }
   }
 }

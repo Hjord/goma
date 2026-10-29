@@ -16,14 +16,14 @@ Status: **done** already met, **build** work needed, **exempt** does not apply (
 
 | Rule | Status | Note |
 |---|---|---|
-| action-setup | exempt | No actions. |
+| action-setup | done | `goma.get_items` is registered in `async_setup`. |
 | appropriate-polling | done | Hourly by default, configurable. |
 | brands | done | `brand/icon.png`, `brand/icon@2x.png`. |
 | common-modules | build | Move the shared device info into a `GomaEntity` base class in `entity.py`. |
 | config-flow | done | |
 | config-flow-test-coverage | build | Test the `code_not_sent` and `unknown` errors, and `unknown` on the code step. |
 | dependency-transparency | todo | See Blocker. |
-| docs-actions | exempt | No actions. |
+| docs-actions | done | README "Actions". |
 | docs-conditions | exempt | No conditions. |
 | docs-high-level-description | done | |
 | docs-installation-instructions | done | |
@@ -41,7 +41,7 @@ Status: **done** already met, **build** work needed, **exempt** does not apply (
 
 | Rule | Status | Note |
 |---|---|---|
-| action-exceptions | exempt | No actions. |
+| action-exceptions | done | `goma.get_items` raises `HomeAssistantError` with a translated message. |
 | config-entry-unloading | done | |
 | docs-configuration-parameters | done | Update interval documented. Recheck wording. |
 | docs-installation-parameters | build | Document the email and code fields. |

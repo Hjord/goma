@@ -58,6 +58,15 @@
     },
     "update_failed": {
       "message": "Kunne ikke læse goma-indkøbslisterne: {error}"
+    },
+    "get_items_failed": {
+      "message": "Kunne ikke læse goma-indkøbslisten: {error}"
+    }
+  },
+  "services": {
+    "get_items": {
+      "name": "Hent varer",
+      "description": "Læser en goma-indkøbsliste, som goma har den nu, og returnerer dens varer, hver med antal, om den er krydset af, og dens BilkaToGo-varenummer, hvor goma har fundet varen i Bilka."
     }
   }
 }

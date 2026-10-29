@@ -56,6 +56,42 @@ Home Assistant keeps the session in its private storage and renews it on its own
 - The lists are **read-only** for now. You tick items off in goma, not in Home Assistant.
 - A list deleted in goma becomes unavailable. Remove its entity if you don't want it.
 
+### Actions
+
+**`goma.get_items`** reads a list as goma has it now, not as of the last poll, and returns its items. Each item has its own `bilka_article_number`, so a script can put the list in a BilkaToGo cart without parsing text. Target the list's to-do entity:
+
+```yaml
+action: goma.get_items
+target:
+  entity_id: todo.goma_gg_indkobsliste
+response_variable: goma
+```
+
+The response is keyed by entity:
+
+```yaml
+todo.goma_gg_indkobsliste:
+  items:
+    - id: 101
+      name: Creme fraiche 38% fedt øko
+      quantity: 2
+      picked: false
+      bilka_article_number: "85164"
+      product_id: bilka-85164
+      brand: Salling ØKO
+      store: Bilka
+    - id: 103
+      name: Salt
+      quantity: 1
+      picked: false
+      bilka_article_number: null
+      product_id: null
+      brand: null
+      store: null
+```
+
+Ticked-off items are included, with `picked: true`. `bilka_article_number` is `null` for items goma didn't find at Bilka. If goma can't be reached, the action fails with an error, and if goma has ended the session, Home Assistant also asks you to log in again.
+
 ## Install
 
 Requires Python 3.12 or newer. The package is published as `goma-gg` and imported as `goma`. Until it is on PyPI, install it from GitHub:
